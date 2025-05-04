@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Annie's Judgment - AGNT.gg</title>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <div class="terminal-screen">
+      <div class="scanline-overlay"></div>
+      <div class="content-wrapper">
+        <div class="terminal-lines-container">
+          <div class="main-panel">
+            <div class="scrollable-content">
+              <h1 class="glitch-text">🧠 Annie's Judgment</h1>
+              <p class="description" id="initialDescription">
+                Let Annie judge your digital essence. Submit your X.com handle
+                to receive her cryptic insights and potential rewards.
+              </p>
+              <p style="text-align: center; margin-top: 0.5rem; margin-bottom: 1rem;">
+                <a href="https://x.com/agnt_annie" target="_blank" rel="noopener noreferrer" style="color: var(--color-cyan); text-decoration: none; font-size: 0.9em;">
+                  <i class="fa-brands fa-x-twitter"></i> @agnt_annie
+                </a>
+              </p>
+              <p
+                class="description"
+                id="postJudgmentDescription"
+                style="display: none"
+              >
+                Annie has judged you. What she saw cannot be unseen. Her memory
+                glitches, but her prophecies remain intact. You may receive a
+                reward... or a warning.
+              </p>
+
+              <div id="resultCard" class="result-card">
+                <div class="twitter-profile">
+                  <img
+                    id="twitterBanner"
+                    class="twitter-banner"
+                    style="display: none"
+                  />
+                  <img id="twitterAvatar" class="twitter-avatar" />
+                </div>
+                <h2>🔮 Annie's Judgment</h2>
+                <p id="alignmentText"></p>
+                <p id="quirkText"></p>
+                <p id="loreText"></p>
+                <p id="tokenAmountText">
+                  +<span id="tokenAmount">0</span> $AGNT Tokens Airdrop Eligible
+                </p>
+                <button
+                  onclick="shareAudit()"
+                  class="terminal-button"
+                  id="shareButton"
+                >
+                  📤 Share My Audit
+                </button>
+                <div id="shareSignInPrompt" style="display: none; color: var(--color-cyan); margin-top: 1rem;">
+                  Please <span style='text-decoration:underline;cursor:pointer;'>sign in with Google</span> to share your audit.
+                </div>
+
+                <div class="auth-leaderboard-section">
+                  <p id="signInPrompt">
+                    Sign in with Google to save your score, get your referral link, and join the leaderboard!
+                  </p>
+
+                  <div class="auth-section">
+                    <button
+                      id="googleSignInButton"
+                      class="google-signin-button"
+                      style="display: none"
+                    >
+                      <i class="fab fa-google"></i> Sign in with Google
+                    </button>
+
+                    <div id="userInfoSection" style="display: none">
+                      <h3>Welcome!</h3>
+                      <div class="pseudonym-container">
+                        <span id="userPseudonym"></span>
+                        <button id="editPseudonymBtn" title="Edit Pseudonym">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                      </div>
+                      <div id="pseudonymEditContainer">
+                        <input
+                          type="text"
+                          id="pseudonymInput"
+                          placeholder="New pseudonym (3-32 chars)"
+                          maxlength="32"
+                        />
+                        <button id="savePseudonymBtn" class="terminal-button">
+                          Save
+                        </button>
+                        <button id="cancelPseudonymBtn" class="terminal-button">
+                          Cancel
+                        </button>
+                      </div>
+                      <p>Your Score: <strong id="userBalance">0</strong> $AGNT</p>
+                      <p>Referrals Made: <strong id="userReferrals">0</strong></p>
+                      <p>Share your link to earn more:</p>
+                      <div class="referral-link-container">
+                        <input type="text" id="referralLinkInput" readonly style="overflow: hidden; text-overflow: ellipsis;" />
+                        <button id="copyLinkButton" class="terminal-button">
+                          Copy
+                        </button>
+                      </div>
+                      <button
+                        id="logoutButton"
+                        class="terminal-button logout-button"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+
+                  <div id="leaderboardSection" style="display: none">
+                    <h3>🏆 Leaderboard</h3>
+                    <table id="leaderboardTable">
+                      <thead>
+                        <tr>
+                          <th>Rank</th>
+                          <th>Pseudonym</th>
+                          <th>Score</th>
+                          <th>Referrals</th>
+                        </tr>
+                      </thead>
+                      <tbody id="leaderboardBody">
+                        <tr>
+                          <td colspan="4" style="text-align: center; opacity: 0.5">
+                            Complete an audit to see the leaderboard.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="twitter-analysis">
+                <div id="twitterUsername">
+                  <div class="input-container">
+                    <input
+                      type="text"
+                      id="twitterHandle"
+                      placeholder="@username"
+                      class="terminal-input"
+                      autocomplete="off"
+                      spellcheck="false"
+                      onkeypress="handleKeyPress(event)"
+                    />
+                    <button
+                      onclick="submitTwitterAnalysis()"
+                      class="terminal-button analyze-button"
+                    >
+                      Analyze
+                    </button>
+                  </div>
+                </div>
+                <a href="#" id="trailerLink" class="trailer-link">Watch AGNT Game Trailer</a>
+                <button
+                  onclick="analyzeTwitterProfile()"
+                  class="re-analyze-button"
+                  style="display: none"
+                >
+                  Re-Analyze My X.com Profile
+                </button>
+                <p
+                  id="reanalysisLimit"
+                  class="description"
+                  style="
+                    display: none;
+                    color: var(--color-red);
+                    margin-top: 0.5rem;
+                    font-size: 0.9em;
+                  "
+                >
+                  You've reached the maximum number of re-analyses for this
+                  profile.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Credits section properly positioned -->
+        <div class="credits-section">
+          <div class="credit-item">
+            <span class="credit-role">Trailer Music Soundtrack:</span>
+            <a href="https://x.com/icodeagents" target="_blank" rel="noopener">@icodeagents</a>
+          </div>
+          <div class="credit-item">
+            <span class="credit-role">Code + Game + Voiceover:</span>
+            <a href="https://x.com/NathanWilbanks_" target="_blank" rel="noopener">@NathanWilbanks_</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Share popup container and other elements -->
+    <div id="sharePopupContainer" style="display: none">
+      <div class="popup-overlay"></div>
+      <div class="popup-notification">
+        <h3 id="popupTitle">🎉 Image Copied!</h3>
+        <p id="popupText" class="popup-notification-text">
+          The image has been copied to your clipboard. You can now paste it
+          directly into X.com using
+          <span class="keyboard-shortcut" id="pasteShortcut">Ctrl+V</span>
+        </p>
+        <p id="popupSubText" class="popup-notification-text">
+          A new X.com window will open when you click continue.
+        </p>
+        <button id="continueToTwitterButton" class="terminal-button">
+          Continue to X.com
+        </button>
+      </div>
+    </div>
+    
+    <!-- Video player overlay -->
+    <div id="videoPlayerOverlay" class="video-player-overlay" style="display: none;">
+      <div class="video-container">
+        <!-- <video id="trailerVideo" src="videos/AGNT_Trailer_1.mp4" controls></video> -->
+        <video id="trailerVideo" src="https://annie.agnt.gg/videos/AGNT_Trailer_1.mp4" controls></video>
+        <button id="closeVideoBtn" class="close-video-btn">&times;</button>
+      </div>
+    </div>
+    
+    <script>
+      const resultCard = document.getElementById("resultCard");
+      const alignmentText = document.getElementById("alignmentText");
+      const quirkText = document.getElementById("quirkText");
+      const loreText = document.getElementById("loreText");
+      const tokenAmount = document.getElementById("tokenAmount");
+      const initialDescription = document.getElementById("initialDescription");
+      const postJudgmentDescription = document.getElementById(
+        "postJudgmentDescription"
+      );
+      const twitterHandleInput = document.getElementById("twitterHandle");
+      const twitterUsernameDiv = document.getElementById("twitterUsername");
+      const analyzeButton = twitterUsernameDiv.querySelector("button");
+      const reAnalyzeButton = document.querySelector(".re-analyze-button");
+      const reanalysisLimitText = document.getElementById("reanalysisLimit");
+      const terminalScreen = document.querySelector(".terminal-screen");
+      const shareButton = document.getElementById("shareButton");
+      const twitterBanner = document.getElementById("twitterBanner");
+      const twitterAvatar = document.getElementById("twitterAvatar");
+      const twitterProfileDiv = document.querySelector(".twitter-profile");
+
+      const googleSignInButton = document.getElementById("googleSignInButton");
+      const userInfoSection = document.getElementById("userInfoSection");
+      const userPseudonymSpan = document.getElementById("userPseudonym");
+      const userBalanceSpan = document.getElementById("userBalance");
+      const userReferralsSpan = document.getElementById("userReferrals");
+      const referralLinkInput = document.getElementById("referralLinkInput");
+      const copyLinkButton = document.getElementById("copyLinkButton");
+      const leaderboardSection = document.getElementById("leaderboardSection");
+      const leaderboardBody = document.getElementById("leaderboardBody");
+      const sharePopupContainer = document.getElementById(
+        "sharePopupContainer"
+      );
+      const continueToTwitterButton = document.getElementById(
+        "continueToTwitterButton"
+      );
+      const editPseudonymBtn = document.getElementById("editPseudonymBtn");
+      const pseudonymEditContainer = document.getElementById(
+        "pseudonymEditContainer"
+      );
+      const pseudonymInput = document.getElementById("pseudonymInput");
+      const savePseudonymBtn = document.getElementById("savePseudonymBtn");
+      const cancelPseudonymBtn = document.getElementById("cancelPseudonymBtn");
+      const signInPrompt = document.getElementById("signInPrompt");
+      
+      // Video player elements
+      const trailerLink = document.getElementById("trailerLink");
+      const videoPlayerOverlay = document.getElementById("videoPlayerOverlay");
+      const trailerVideo = document.getElementById("trailerVideo");
+      const closeVideoBtn = document.getElementById("closeVideoBtn");
+
+      let currentUser = null;
+      let analysisCompleted = false;
+      let tempReferralCode = null;
+
+      const SHARE_BASE_URL = "https://annie.agnt.gg";
+      const APP_BASE_URL = window.location.origin;
+
+      function parseJwt(token) {
+        try {
+          const base64Url = token.split(".")[1];
+          const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+          const jsonPayload = decodeURIComponent(
+            atob(base64)
+              .split("")
+              .map(function (c) {
+                return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+              })
+              .join("")
+          );
+          return JSON.parse(jsonPayload);
+        } catch (e) {
+          console.error("Failed to parse JWT:", e);
+          return null;
+        }
+      }
+
+      function loadImage(src) {
+        return new Promise((resolve, reject) => {
+          if (!src) {
+            resolve(null);
+            return;
+          }
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.onload = () => resolve(img);
+          img.onerror = (err) => {
+            console.error(`Failed to load image: ${src}`, err);
+            resolve(null);
+          };
+          img.src = src;
+        });
+      }
+
+      function signInWithGoogle() {
+        // Store current analysis state if it exists
+        if (analysisCompleted) {
+          const analysisState = {
+            alignment: alignmentText.textContent,
+            quirk: quirkText.textContent,
+            lore: loreText.textContent,
+            avatarUrl: twitterAvatar.src,
+            bannerUrl: twitterBanner.style.display !== 'none' ? twitterBanner.src : null,
+            tempReferralCode
+          };
+          localStorage.setItem('pendingAnalysis', JSON.stringify(analysisState));
+          // Token amount is now stored securely in the session on the server
+        }
+
+        // Always use existing referral code if available
+        const existingReferral = localStorage.getItem("pendingReferral");
+        let authUrl = `${APP_BASE_URL}/auth/google`;
+        const params = new URLSearchParams();
+        
+        if (existingReferral) {
+          params.append('ref', existingReferral);
+          console.log("Adding existing referral to auth URL:", existingReferral);
+        } else if (tempReferralCode) {
+          params.append('ref', tempReferralCode);
+          localStorage.setItem("pendingReferral", tempReferralCode);
+          console.log("Adding temp referral to auth URL:", tempReferralCode);
+        }
+
+        // Token amount is now stored in the session on the server, no need to pass it in the URL
+
+        // Add all params to auth URL
+        if (params.toString()) {
+          authUrl += `?${params.toString()}`;
+        }
+
+        window.location.href = authUrl;
+      }
+
+      function logout() {
+        localStorage.removeItem("jwtToken");
+        currentUser = null;
+        updateAuthUI();
+        console.log("User logged out.");
+      }
+
+      function updateAuthUI() {
+        const showAuthArea = analysisCompleted;
+
+        signInPrompt.style.display = "none";
+        googleSignInButton.style.display = "none";
+        userInfoSection.style.display = "none";
+        leaderboardSection.style.display = "none";
+
+        // Always show token amount if analysis is completed
+        const tokenAmountText = document.getElementById("tokenAmountText");
+        if (analysisCompleted) {
+          tokenAmountText.style.display = "block";
+          
+          // Only update balances if user is logged in
+          if (currentUser) {
+            // For consistency, if we have both values, make sure they match
+            if (tokenAmount.textContent) {
+              // If token amount from analysis is higher than user balance, display the higher value
+              // This handles cases where the database update might not have happened yet
+              const analysisTokens = parseInt(tokenAmount.textContent, 10);
+              const userTokens = parseInt(currentUser.balance, 10);
+              
+              if (!isNaN(analysisTokens) && !isNaN(userTokens)) {
+                // Always show the higher value in both places for consistency
+                if (analysisTokens > userTokens) {
+                  userBalanceSpan.textContent = analysisTokens;
+                } else {
+                  // If user's balance in JWT is higher, update the displayed token amount
+                  tokenAmount.textContent = userTokens;
+                  userBalanceSpan.textContent = userTokens;
+                }
+              } else {
+                // Fallback if parsing fails
+                userBalanceSpan.textContent = tokenAmount.textContent;
+              }
+            } else if (currentUser.balance) {
+              // If no token amount from analysis but we have user balance
+              tokenAmount.textContent = currentUser.balance;
+              userBalanceSpan.textContent = currentUser.balance;
+            }
+          }
+        }
+
+        updateShareButtonVisibility();
+
+        if (showAuthArea) {
+          if (currentUser) {
+            userInfoSection.style.display = "block";
+            leaderboardSection.style.display = "block";
+
+            userPseudonymSpan.textContent = currentUser.pseudonym;
+            // Balance is already set above
+            
+            // Set referral count
+            userReferralsSpan.textContent = currentUser.referralCount || 0;
+            
+            // Use SHARE_BASE_URL for the referral link input
+            const referralLink = `${SHARE_BASE_URL}/?ref=${currentUser.referralCode}`;
+            referralLinkInput.value = referralLink;
+
+            pseudonymEditContainer.style.display = "none";
+            userPseudonymSpan.parentElement.style.display = "flex";
+
+            fetchAndDisplayLeaderboard();
+          } else {
+            signInPrompt.style.display = "block";
+            googleSignInButton.style.display = "inline-flex";
+            leaderboardSection.style.display = "block";
+            fetchAndDisplayLeaderboard();
+          }
+        }
+      }
+
+      function checkAuthState() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get("token");
+        const authError = urlParams.get("authError");
+
+        if (authError) {
+          console.error("Google Authentication failed.");
+          alert("Sign-in failed. Please try again.");
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
+          return;
+        }
+
+        if (token) {
+          console.log("Token found in URL parameter.");
+          localStorage.setItem("jwtToken", token);
+          currentUser = parseJwt(token);
+          
+          // If we have a completed analysis, update the user's balance display to match the token amount
+          if (analysisCompleted && tokenAmount.textContent) {
+            userBalanceSpan.textContent = tokenAmount.textContent;
+          }
+          
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
+        } else {
+          const storedToken = localStorage.getItem("jwtToken");
+          if (storedToken) {
+            console.log("Token found in local storage.");
+            currentUser = parseJwt(storedToken);
+            if (currentUser && currentUser.exp * 1000 < Date.now()) {
+              console.log("Token expired.");
+              logout();
+              return;
+            }
+          }
+        }
+
+        if (currentUser) {
+          console.log("User is logged in:", currentUser.pseudonym);
+        } else {
+          console.log("User is not logged in.");
+        }
+        updateAuthUI();
+        updateShareButtonVisibility();
+      }
+
+      function copyReferralLink() {
+        referralLinkInput.select();
+        referralLinkInput.setSelectionRange(0, 99999);
+        try {
+          document.execCommand("copy");
+          copyLinkButton.textContent = "Copied!";
+          setTimeout(() => {
+            copyLinkButton.textContent = "Copy";
+          }, 2000);
+        } catch (err) {
+          console.error("Failed to copy referral link:", err);
+          alert("Failed to copy link. Please copy it manually.");
+        }
+      }
+
+      async function fetchAndDisplayLeaderboard() {
+        try {
+          const response = await fetch("/api/leaderboard");
+          if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+          const leaderboardData = await response.json();
+
+          leaderboardBody.innerHTML = "";
+
+          if (leaderboardData.length === 0) {
+            leaderboardBody.innerHTML =
+              '<tr><td colspan="4" style="text-align: center; opacity: 0.7;">Be the first on the leaderboard!</td></tr>';
+            return;
+          }
+
+          leaderboardData.forEach((entry, index) => {
+            const row = document.createElement("tr");
+            if (currentUser && entry.pseudonym === currentUser.pseudonym) {
+              row.classList.add("highlight-user");
+            }
+            row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${entry.pseudonym}</td>
+            <td>${entry.balance}</td>
+            <td>${entry.referral_count || 0}</td>
+          `;
+            leaderboardBody.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Failed to fetch leaderboard:", error);
+          leaderboardBody.innerHTML =
+            '<tr><td colspan="4" style="text-align: center; color: var(--color-red);">Error loading leaderboard</td></tr>';
+        }
+      }
+
+      function handleKeyPress(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          submitTwitterAnalysis();
+        }
+      }
+
+      function resetAnalysisUI() {
+        const scrollableContent = document.querySelector('.scrollable-content');
+        scrollableContent.classList.add('centered');
+
+        resultCard.style.display = "none";
+        resultCard.style.opacity = "0";
+        resultCard.classList.remove("visible");
+        initialDescription.style.display = "block";
+        postJudgmentDescription.style.display = "none";
+        twitterUsernameDiv.style.display = "block";
+        reAnalyzeButton.style.display = "none";
+        reanalysisLimitText.style.display = "none";
+        twitterHandleInput.value = "";
+        analyzeButton.disabled = false;
+        analyzeButton.textContent = "Analyze";
+        twitterBanner.style.display = "none";
+        twitterBanner.src = "";
+        twitterAvatar.src = "";
+        twitterProfileDiv.classList.remove("no-banner");
+
+        // Reset auth and leaderboard sections
+        signInPrompt.style.display = "none";
+        googleSignInButton.style.display = "none";
+        userInfoSection.style.display = "none";
+        leaderboardSection.style.display = "none";
+        analysisCompleted = false;
+      }
+
+      async function submitTwitterAnalysis(forceRefresh = false) {
+        const username = twitterHandleInput.value.replace(/[@\s]/g, "");
+        if (!username) {
+          alert("Please enter an X.com username");
+          twitterHandleInput.focus();
+          return;
+        }
+
+        const originalButtonText = analyzeButton.textContent;
+        analyzeButton.textContent = forceRefresh
+          ? "Re-Analyzing..."
+          : "Analyzing...";
+        analyzeButton.disabled = true;
+        reAnalyzeButton.style.display = "none";
+
+        if (resultCard.classList.contains("visible")) {
+          resultCard.style.opacity = "0";
+          await new Promise((resolve) => setTimeout(resolve, 300));
+          resultCard.style.display = "none";
+          resultCard.classList.remove("visible");
+        }
+
+        // Reset to initial state during glitch
+        const scrollableContent = document.querySelector('.scrollable-content');
+        scrollableContent.classList.add('centered');
+        initialDescription.style.display = "block";
+        postJudgmentDescription.style.display = "none";
+
+        terminalScreen.classList.add("glitching");
+
+        const apiCallPromise = fetch("/api/analyze-twitter", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, forceRefresh }),
+        });
+
+        const minGlitchTime = 5000;
+        const glitchTimerPromise = new Promise((resolve) =>
+          setTimeout(resolve, minGlitchTime)
+        );
+
+        try {
+          const [response] = await Promise.all([
+            apiCallPromise,
+            glitchTimerPromise,
+          ]);
+
+          terminalScreen.classList.remove("glitching");
+
+          if (!response.ok) {
+            const errorData = await response
+              .json()
+              .catch(() => ({ error: "Unknown server error" }));
+            console.error("Analysis API Error:", response.status, errorData);
+            if (response.status === 429) {
+              twitterUsernameDiv.style.display = "none";
+              reAnalyzeButton.style.display = "none";
+              reanalysisLimitText.textContent =
+                errorData.error || "Maximum re-analysis limit reached.";
+              reanalysisLimitText.style.display = "block";
+            } else if (response.status === 404) {
+              alert(`X.com profile @${username} not found.`);
+              twitterUsernameDiv.style.display = "block";
+            } else {
+              alert(
+                `Error: ${errorData.error || "Failed to analyze profile."}`
+              );
+              twitterUsernameDiv.style.display = "block";
+            }
+            analyzeButton.textContent = originalButtonText;
+            analyzeButton.disabled = false;
+            analysisCompleted = false;
+            updateAuthUI();
+            return;
+          }
+
+          const analysis = await response.json();
+          console.log("Analysis received:", analysis);
+          analysisCompleted = true;
+          
+          if (analysis.tempReferralCode) {
+            tempReferralCode = analysis.tempReferralCode;
+            console.log("Temporary referral code generated:", tempReferralCode);
+          }
+
+          terminalScreen.classList.add("darkening");
+          await new Promise((resolve) => setTimeout(resolve, 100));
+
+          await Promise.all([
+            loadImage(
+              analysis.bannerUrl
+                ? `/proxy-image?url=${encodeURIComponent(analysis.bannerUrl)}`
+                : null
+            ),
+            loadImage(
+              `/proxy-image?url=${encodeURIComponent(analysis.avatarUrl)}`
+            ),
+          ]);
+
+          alignmentText.textContent = `Alignment: ${analysis.alignment}`;
+          quirkText.textContent = `Quirk: ${analysis.quirk}`;
+          loreText.textContent = analysis.lore;
+          tokenAmount.textContent = analysis.tokenAmount;
+          
+          // Always show token amount regardless of login status
+          const tokenAmountText = document.getElementById("tokenAmountText");
+          tokenAmountText.style.display = "block";
+
+          if (analysis.bannerUrl) {
+            twitterBanner.src = `/proxy-image?url=${encodeURIComponent(
+              analysis.bannerUrl
+            )}`;
+            twitterBanner.style.display = "block";
+            twitterProfileDiv.classList.remove("no-banner");
+          } else {
+            twitterBanner.style.display = "none";
+            twitterProfileDiv.classList.add("no-banner");
+          }
+          twitterAvatar.src = `/proxy-image?url=${encodeURIComponent(
+            analysis.avatarUrl
+          )}`;
+
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+
+          // Change alignment 500ms before removing darkening
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          const scrollableContent = document.querySelector('.scrollable-content');
+          scrollableContent.classList.remove('centered');
+
+          terminalScreen.classList.remove("darkening");
+
+          resultCard.style.display = "block";
+          await new Promise((resolve) => setTimeout(resolve, 50));
+
+          resultCard.classList.add("visible");
+          resultCard.style.opacity = "1";
+          initialDescription.style.display = "none";
+          postJudgmentDescription.style.display = "block";
+
+          twitterUsernameDiv.style.display = "none";
+          if (analysis.reanalysisCount < 3) {
+            reAnalyzeButton.style.display = "block";
+            reanalysisLimitText.style.display = "none";
+          } else {
+            reAnalyzeButton.style.display = "none";
+            reanalysisLimitText.textContent =
+              "You've reached the maximum number of re-analyses for this profile.";
+            reanalysisLimitText.style.display = "block";
+          }
+
+          updateAuthUI();
+          updateShareButtonVisibility();
+        } catch (error) {
+          console.error("Error during analysis process:", error);
+          terminalScreen.classList.remove("glitching");
+          terminalScreen.classList.remove("darkening");
+          alert("An unexpected error occurred. Please try again.");
+          twitterUsernameDiv.style.display = "block";
+          analysisCompleted = false;
+          updateAuthUI();
+          updateShareButtonVisibility();
+        } finally {
+          if (analyzeButton.disabled) {
+            analyzeButton.textContent = originalButtonText;
+            analyzeButton.disabled = false;
+          }
+        }
+      }
+
+      function analyzeTwitterProfile() {
+        submitTwitterAnalysis(true);
+      }
+
+      async function shareAudit() {
+        const originalText = shareButton.textContent;
+        shareButton.textContent = "Creating...";
+        shareButton.disabled = true;
+
+        try {
+          await Promise.all([
+            twitterBanner.style.display !== "none"
+              ? loadImage(twitterBanner.src)
+              : Promise.resolve(),
+            loadImage(twitterAvatar.src),
+          ]);
+          console.log("Images preloaded for canvas");
+
+          const canvas = await html2canvas(resultCard, {
+            backgroundColor: null,
+            scale: window.devicePixelRatio * 1.5,
+            logging: false,
+            allowTaint: true,
+            useCORS: true,
+            onclone: (clonedDoc) => {
+              const clonedCard = clonedDoc.querySelector(".result-card");
+              if (clonedCard) {
+                clonedCard.style.border = "none";
+                clonedCard.style.borderRadius = "0";
+                clonedCard.style.boxShadow = "none";
+                clonedCard.style.background = "var(--color-dark-navy)";
+
+                const clonedShareButton =
+                  clonedCard.querySelector("#shareButton");
+                if (clonedShareButton) clonedShareButton.style.display = "none";
+
+                // Ensure token amount is visible in the shared image even if hidden in UI
+                const clonedTokenAmount = clonedCard.querySelector("#tokenAmountText");
+                if (clonedTokenAmount) clonedTokenAmount.style.display = "block";
+
+                const clonedAuthLeaderboard = 
+                  clonedCard.querySelector(".auth-leaderboard-section");
+                if (clonedAuthLeaderboard) clonedAuthLeaderboard.style.display = "none";
+              }
+              const clonedAvatar = clonedDoc.querySelector(".twitter-avatar");
+              if (clonedAvatar) clonedAvatar.style.border = "none";
+              const clonedBanner = clonedDoc.querySelector(".twitter-banner");
+              if (clonedBanner) clonedBanner.style.border = "none";
+            },
+          });
+          console.log("Canvas created");
+
+          const blob = await new Promise((resolve) =>
+            canvas.toBlob(resolve, "image/png")
+          );
+          console.log("Canvas converted to blob");
+
+          if (!navigator.clipboard || !navigator.clipboard.write) {
+            throw new Error(
+              "Clipboard API not supported or requires secure context (HTTPS)."
+            );
+          }
+
+          await navigator.clipboard.write([
+            new ClipboardItem({ "image/png": blob }),
+          ]);
+          console.log("Image written to clipboard");
+
+          showNotification(true);
+        } catch (error) {
+          console.error("Share error:", error);
+          showNotification(false, error.message);
+          shareButton.textContent = "❌ Share failed";
+          setTimeout(() => {
+            shareButton.textContent = originalText;
+          }, 3000);
+        } finally {
+          shareButton.disabled = false;
+          if (shareButton.textContent !== "❌ Share failed") {
+            shareButton.textContent = originalText;
+          }
+        }
+      }
+
+      function showNotification(isSuccess, errorMessage = "") {
+        const popupTitle = sharePopupContainer.querySelector("#popupTitle");
+        const popupText = sharePopupContainer.querySelector("#popupText");
+        const popupSubText = sharePopupContainer.querySelector("#popupSubText");
+        const continueButton = sharePopupContainer.querySelector("button");
+        const pasteShortcutSpan =
+          sharePopupContainer.querySelector("#pasteShortcut");
+
+        const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+        pasteShortcutSpan.textContent = isMac ? "⌘+V" : "Ctrl+V";
+
+        if (isSuccess) {
+          popupTitle.textContent = "🎉 Image Copied!";
+          popupText.style.display = "block";
+          popupSubText.style.display = "block";
+          continueButton.style.display = "block";
+        } else {
+          popupTitle.textContent = "⚠️ Copy Failed";
+          popupText.textContent = `Could not copy image to clipboard. ${
+            errorMessage || "Please try again or ensure you are on HTTPS."
+          }`;
+          popupText.style.display = "block";
+          popupSubText.style.display = "none";
+          continueButton.style.display = "none";
+        }
+
+        sharePopupContainer.style.display = "block";
+
+        const overlay = sharePopupContainer.querySelector(".popup-overlay");
+        overlay.onclick = () => {
+          if (!isSuccess) {
+            sharePopupContainer.style.display = "none";
+            overlay.onclick = null;
+          }
+        };
+        document.onkeydown = (evt) => {
+          evt = evt || window.event;
+          if (evt.key === "Escape" && !isSuccess) {
+            sharePopupContainer.style.display = "none";
+            document.onkeydown = null;
+          }
+        };
+      }
+
+      function continueToTwitter(button) {
+        // Always use SHARE_BASE_URL for Twitter shares
+        const shareUrl = `${SHARE_BASE_URL}/?ref=${currentUser ? 
+          currentUser.referralCode : 
+          localStorage.getItem("pendingReferral") || 
+          tempReferralCode}`;
+
+        // Include the token amount in the tweet only if logged in
+        const tokenText = currentUser ? 
+          `\n\nVerdict: +${tokenAmount.textContent} $AGNT Tokens Airdrop Eligible 🔥` : 
+          `\n\nVerdict: Become eligible for $AGNT Tokens Airdrop 🔥`;
+
+        const tweetText = `Annie judged my X profile 👀...\n\n${alignmentText.textContent}\n${quirkText.textContent}\n\n"${loreText.textContent}..."${tokenText}\n\nAudit yours: \n${shareUrl}\n\n#AnnieAudit #AGNTgame @agnt_gg`;
+
+        sharePopupContainer.style.display = "none";
+        sharePopupContainer.querySelector(".popup-overlay").onclick = null;
+        document.onkeydown = null;
+
+        if (!currentUser) {
+          signInPrompt.style.display = "block";
+          googleSignInButton.style.display = "inline-flex";
+          // Store the referral code if we have one
+          const refCode = localStorage.getItem("pendingReferral") || tempReferralCode;
+          if (refCode && !localStorage.getItem("pendingReferral")) {
+            localStorage.setItem("pendingReferral", refCode);
+          }
+        }
+
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+        window.open(twitterUrl, "_blank");
+      }
+
+      async function loadSharedAudit(shareId) {
+        try {
+          twitterUsernameDiv.style.display = "none";
+          reAnalyzeButton.style.display = "none";
+          googleSignInButton.style.display = "none";
+          userInfoSection.style.display = "none";
+          leaderboardSection.style.display = "none";
+          initialDescription.style.display = "none";
+
+          const response = await fetch(`/api/share/${shareId}`);
+          if (!response.ok) throw new Error("Share link not found or invalid");
+
+          const { i: imageUrl, d: auditData } = await response.json();
+
+          console.log("Loading shared audit:", auditData);
+
+          alignmentText.textContent = auditData.alignment;
+          quirkText.textContent = auditData.quirk;
+          loreText.textContent = auditData.lore;
+          tokenAmount.textContent = auditData.tokenAmount;
+          
+          // Always show token amount regardless of login status
+          const tokenAmountText = document.getElementById("tokenAmountText");
+          tokenAmountText.style.display = "block";
+
+          resultCard.style.display = "block";
+          resultCard.classList.add("visible");
+          resultCard.style.opacity = "1";
+          postJudgmentDescription.textContent = "Viewing a shared Annie Audit:";
+          postJudgmentDescription.style.display = "block";
+
+          twitterProfileDiv.style.display = "none";
+          shareButton.style.display = "none";
+        } catch (error) {
+          console.error("Error loading shared audit:", error);
+          initialDescription.textContent = `Error: ${error.message}. Could not load shared audit.`;
+          initialDescription.style.display = "block";
+          initialDescription.style.color = "var(--color-red)";
+        }
+      }
+
+      function togglePseudonymEdit(showEdit = false) {
+        const displayContainer = userPseudonymSpan.parentElement;
+
+        if (showEdit) {
+          pseudonymInput.value = currentUser.pseudonym;
+          displayContainer.style.display = "none";
+          pseudonymEditContainer.style.display = "flex";
+          pseudonymInput.focus();
+        } else {
+          displayContainer.style.display = "flex";
+          pseudonymEditContainer.style.display = "none";
+        }
+      }
+
+      async function updatePseudonym() {
+        const newPseudonym = pseudonymInput.value.trim();
+        const originalPseudonym = currentUser.pseudonym;
+
+        if (!newPseudonym || newPseudonym === originalPseudonym) {
+          togglePseudonymEdit(false);
+          return;
+        }
+
+        if (newPseudonym.length < 3 || newPseudonym.length > 32) {
+          alert("Pseudonym must be between 3 and 32 characters.");
+          pseudonymInput.focus();
+          return;
+        }
+
+        if (!/^[a-zA-Z0-9_-]+$/.test(newPseudonym)) {
+          alert(
+            "Pseudonym can only contain letters, numbers, underscores, and hyphens."
+          );
+          pseudonymInput.focus();
+          return;
+        }
+
+        savePseudonymBtn.textContent = "Saving...";
+        savePseudonymBtn.disabled = true;
+        cancelPseudonymBtn.disabled = true;
+
+        try {
+          const token = localStorage.getItem("jwtToken");
+          if (!token) {
+            throw new Error("Authentication token not found.");
+          }
+
+          const response = await fetch("/api/update-pseudonym", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ newPseudonym: newPseudonym }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok || !result.success) {
+            throw new Error(
+              result.message || `HTTP error! status: ${response.status}`
+            );
+          }
+
+          console.log("Pseudonym updated:", result.newPseudonym);
+          alert("Pseudonym updated successfully!");
+
+          currentUser.pseudonym = result.newPseudonym;
+          userPseudonymSpan.textContent = result.newPseudonym;
+
+          if (result.newToken) {
+            localStorage.setItem("jwtToken", result.newToken);
+            currentUser = parseJwt(result.newToken);
+            userBalanceSpan.textContent = currentUser.balance;
+          } else {
+            currentUser.pseudonym = result.newPseudonym;
+          }
+
+          togglePseudonymEdit(false);
+          fetchAndDisplayLeaderboard();
+        } catch (error) {
+          console.error("Failed to update pseudonym:", error);
+          alert(`Error updating pseudonym: ${error.message}`);
+          pseudonymInput.focus();
+        } finally {
+          savePseudonymBtn.textContent = "Save";
+          savePseudonymBtn.disabled = false;
+          cancelPseudonymBtn.disabled = false;
+        }
+      }
+
+      function updateShareButtonVisibility() {
+        const shareSignInPrompt = document.getElementById("shareSignInPrompt");
+
+        if (!analysisCompleted) {
+          shareButton.style.display = "none";
+          shareSignInPrompt.style.display = "none";
+          googleSignInButton.style.display = "none";
+          return;
+        }
+
+        if (currentUser) {
+          shareButton.style.display = "block";
+          shareSignInPrompt.style.display = "none";
+          googleSignInButton.style.display = "none";
+        } else {
+          shareButton.style.display = "none";
+          shareSignInPrompt.style.display = "none";
+          googleSignInButton.style.display = "inline-flex";
+          signInPrompt.style.display = "block";
+        }
+      }
+
+      // Add this near the window.onload function to adjust the viewport on very small screens
+      function adjustViewport() {
+        const width = window.innerWidth;
+        if (width < 360) {
+          // For very small screens, ensure content is properly scaled
+          document.querySelector('meta[name="viewport"]').setAttribute(
+            'content', 
+            'width=device-width, initial-scale=0.86, maximum-scale=0.86, user-scalable=no'
+          );
+        }
+      }
+      
+      // Call this function on load and resize
+      window.addEventListener('load', adjustViewport);
+      window.addEventListener('resize', adjustViewport);
+
+      window.onload = function () {
+        console.log("Page loaded");
+
+        const scrollableContent = document.querySelector('.scrollable-content');
+        scrollableContent.classList.add('centered');
+
+        const urlParamsOnLoad = new URLSearchParams(window.location.search);
+        const refCode = urlParamsOnLoad.get("ref");
+        
+        // Only store referral code if one doesn't already exist
+        if (refCode && !localStorage.getItem("pendingReferral")) {
+          console.log("New referral code found in URL:", refCode);
+          localStorage.setItem("pendingReferral", refCode);
+        }
+        
+        // Always clean up URL regardless
+        if (refCode) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        checkAuthState();
+
+        // Restore analysis state if it exists
+        const savedAnalysis = localStorage.getItem('pendingAnalysis');
+        if (savedAnalysis) {
+          try {
+            const analysis = JSON.parse(savedAnalysis);
+            alignmentText.textContent = analysis.alignment;
+            quirkText.textContent = analysis.quirk;
+            loreText.textContent = analysis.lore;
+            tokenAmount.textContent = analysis.tokenAmount;
+            
+            if (analysis.avatarUrl) {
+              twitterAvatar.src = analysis.avatarUrl;
+            }
+            
+            if (analysis.bannerUrl) {
+              twitterBanner.src = analysis.bannerUrl;
+              twitterBanner.style.display = "block";
+              twitterProfileDiv.classList.remove("no-banner");
+            } else {
+              twitterBanner.style.display = "none";
+              twitterProfileDiv.classList.add("no-banner");
+            }
+
+            tempReferralCode = analysis.tempReferralCode;
+            
+            resultCard.style.display = "block";
+            resultCard.classList.add("visible");
+            resultCard.style.opacity = "1";
+            initialDescription.style.display = "none";
+            postJudgmentDescription.style.display = "block";
+            twitterUsernameDiv.style.display = "none";
+            analysisCompleted = true;
+            
+            // Always show token amount text
+            const tokenAmountText = document.getElementById("tokenAmountText");
+            tokenAmountText.style.display = "block";
+            
+            scrollableContent.classList.remove('centered');
+            updateAuthUI();
+            
+            // Don't clear the analysis state until after successful login
+            if (currentUser) {
+              localStorage.removeItem('pendingAnalysis');
+            }
+          } catch (error) {
+            console.error("Error restoring analysis state:", error);
+          }
+        }
+
+        const shareId = urlParamsOnLoad.get("share");
+        if (shareId) {
+          loadSharedAudit(shareId);
+        } else {
+          if (!currentUser && !savedAnalysis) {
+            twitterHandleInput.focus();
+          }
+        }
+
+        // Set up event listeners
+        googleSignInButton.addEventListener("click", signInWithGoogle);
+        logoutButton.addEventListener("click", logout);
+        copyLinkButton.addEventListener("click", copyReferralLink);
+        continueToTwitterButton.addEventListener("click", continueToTwitter);
+        editPseudonymBtn.addEventListener("click", () =>
+          togglePseudonymEdit(true)
+        );
+        savePseudonymBtn.addEventListener("click", updatePseudonym);
+        cancelPseudonymBtn.addEventListener("click", () =>
+          togglePseudonymEdit(false)
+        );
+        
+        // Video player event listeners
+        trailerLink.addEventListener("click", function(e) {
+          e.preventDefault();
+          videoPlayerOverlay.style.display = "flex";
+          trailerVideo.play();
+          
+          // Request fullscreen if supported
+          if (trailerVideo.requestFullscreen) {
+            trailerVideo.requestFullscreen();
+          } else if (trailerVideo.webkitRequestFullscreen) { /* Safari */
+            trailerVideo.webkitRequestFullscreen();
+          } else if (trailerVideo.msRequestFullscreen) { /* IE11 */
+            trailerVideo.msRequestFullscreen();
+          }
+        });
+        
+        closeVideoBtn.addEventListener("click", function() {
+          // Exit fullscreen if active
+          if (document.fullscreenElement ||
+              document.webkitFullscreenElement ||
+              document.msFullscreenElement) {
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { /* Safari */
+              document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE11 */
+              document.msExitFullscreen();
+            }
+          }
+          
+          trailerVideo.pause();
+          videoPlayerOverlay.style.display = "none";
+        });
+        
+        // Close video when clicking outside the video (on the overlay)
+        videoPlayerOverlay.addEventListener("click", function(e) {
+          if (e.target === videoPlayerOverlay) {
+            closeVideoBtn.click();
+          }
+        });
+        
+        // Listen for fullscreen change and close overlay if user exits fullscreen
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+        
+        function handleFullscreenChange() {
+          if (!document.fullscreenElement && 
+              !document.webkitFullscreenElement && 
+              !document.mozFullScreenElement &&
+              !document.msFullscreenElement) {
+            // User exited fullscreen, close the overlay
+            videoPlayerOverlay.style.display = "none";
+            trailerVideo.pause();
+          }
+        }
+      };
+    </script>
+  </body>
+</html>
